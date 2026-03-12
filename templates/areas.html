@@ -1,0 +1,29 @@
+<h2>Áreas do Hospital</h2>
+
+<form method="POST">
+
+<input name="nome" placeholder="Nome da área">
+
+<button type="submit">Adicionar</button>
+
+</form>
+
+<hr>
+
+<table border="1">
+
+<tr>
+<th>ID</th>
+<th>Área</th>
+</tr>
+
+{% for a in areas %}
+
+<tr>
+<td>{{a.id}}</td>
+<td>{{a.nome}}</td>
+</tr>
+
+{% endfor %}
+
+</table>

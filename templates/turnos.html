@@ -1,0 +1,27 @@
+<h2>Turnos</h2>
+
+<form method="POST">
+<input name="nome" placeholder="Nome do turno">
+
+<button type="submit">Adicionar</button>
+</form>
+
+<hr>
+
+<table border="1">
+
+<tr>
+<th>ID</th>
+<th>Nome</th>
+</tr>
+
+{% for t in turnos %}
+
+<tr>
+<td>{{t.id}}</td>
+<td>{{t.nome}}</td>
+</tr>
+
+{% endfor %}
+
+</table>

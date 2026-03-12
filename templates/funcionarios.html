@@ -1,0 +1,35 @@
+<h2>Funcionários</h2>
+
+<form method="POST">
+
+<input name="nome" placeholder="Nome" required>
+<input name="funcao" placeholder="Função" required>
+
+<select name="area_id" required>
+<option value="">Selecione a Área</option>
+{% for a in areas %}
+<option value="{{a.id}}">{{a.nome}}</option>
+{% endfor %}
+</select>
+
+<button type="submit">Adicionar</button>
+</form>
+
+<hr>
+
+<table border="1">
+<tr>
+<th>Nome</th>
+<th>Função</th>
+<th>Área</th>
+</tr>
+
+{% for f in funcionarios %}
+<tr>
+<td>{{f.nome}}</td>
+<td>{{f.funcao}}</td>
+<td>{{f.area_nome}}</td>
+</tr>
+{% endfor %}
+
+</table>

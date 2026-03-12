@@ -1,0 +1,68 @@
+<link rel="stylesheet" href="/static/style.css">
+
+<h2>Escala Mensal</h2>
+
+<form method="GET" action="/escala">
+<select name="area_id" onchange="this.form.submit()">
+<option value="">Selecione a Área</option>
+{% for a in areas %}
+<option value="{{a.id}}" {% if area_id and area_id|int == a.id %}selected{% endif %}>
+{{a.nome}}
+</option>
+{% endfor %}
+</select>
+</form>
+<br>
+
+{% if area_id %}
+<a href="/escala/pdf?area_id={{area_id}}" target="_blank">
+<button>Exportar PDF</button>
+</a>
+{% endif %}
+
+<table border="1">
+
+    <tr>
+    <th>Nome</th>
+    <th>Categoria</th>
+    {% for d in dias %}
+    <th>{{d}}</th>
+    {% endfor %}
+    </tr>
+    
+    {% for f in funcionarios %}
+    <tr>
+    <td>{{f.nome}}</td>
+    <td>{{f.funcao}}</td>
+    {% for d in dias %}
+    <td>
+        {% set data_str = "{:04d}-{:02d}-{:02d}".format(2026, 3, d) %}
+        <input type="checkbox" class="dia-checkbox"
+            data-funcionario="{{f.id}}"
+            data-dia="{{d}}"
+            {% if escala_dict.get((f.id, data_str)) == "X" %}checked{% endif %}
+        >
+    </td>
+    {% endfor %}
+    </tr>
+    {% endfor %}
+    
+    </table>
+    
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+    $(document).ready(function(){
+        $(".dia-checkbox").change(function(){
+            var funcionario_id = $(this).data("funcionario");
+            var dia = $(this).data("dia");
+            var status = $(this).is(":checked") ? "X" : "";
+            var data = "2026-03-" + String(dia).padStart(2,"0");  // aqui fixo para março 2026
+    
+            $.post("/salvar_escala", {
+                funcionario_id: funcionario_id,
+                data: data,
+                status: status
+            });
+        });
+    });
+    </script>

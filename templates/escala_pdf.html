@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>Escala {{area_nome}}</title>
+<style>
+body { font-family: sans-serif; font-size: 12px; }
+table { border-collapse: collapse; width: 100%; }
+th, td { border: 1px solid black; padding: 4px; text-align: center; }
+th { background-color: #f2f2f2; }
+</style>
+</head>
+<body>
+
+<h2>Escala - {{area_nome}}</h2>
+
+<table>
+<tr>
+<th>Nome</th>
+<th>Categoria</th>
+{% for d in dias %}
+<th>{{d}}</th>
+{% endfor %}
+</tr>
+
+{% for f in funcionarios %}
+<tr>
+<td>{{f.nome}}</td>
+<td>{{f.funcao}}</td>
+{% for d in dias %}
+{% set data_str = "{:04d}-{:02d}-{:02d}".format(2026, 3, d) %}
+<td>{{ escala_dict.get((f.id, data_str), "") }}</td>
+{% endfor %}
+</tr>
+{% endfor %}
+
+</table>
+</body>
+</html>
