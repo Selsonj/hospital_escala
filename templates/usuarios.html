@@ -1,0 +1,48 @@
+<link rel="stylesheet" href="/static/style.css">
+
+<h1>Gestão de Usuários</h1>
+
+<form method="post">
+
+<input name="username" placeholder="Usuário" required>
+
+<input name="password" type="password" placeholder="Senha" required>
+
+<select name="role">
+<option value="admin">Admin</option>
+<option value="chefe">Chefe de Área</option>
+<option value="funcionario">Funcionário</option>
+</select>
+
+<select name="area_id">
+<option value="">Sem área</option>
+{% for a in areas %}
+<option value="{{a.id}}">{{a.nome}}</option>
+{% endfor %}
+</select>
+
+<button type="submit">Criar Usuário</button>
+
+</form>
+
+<h2>Usuários existentes</h2>
+
+<table>
+
+<tr>
+<th>Usuário</th>
+<th>Função</th>
+<th>Área</th>
+</tr>
+
+{% for u in usuarios %}
+
+<tr>
+<td>{{u.username}}</td>
+<td>{{u.role}}</td>
+<td>{{u.area if u.area else "-"}}</td>
+</tr>
+
+{% endfor %}
+
+</table>
