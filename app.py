@@ -1,7 +1,9 @@
 from flask import Flask, render_template, request, redirect
+from flask import session, redirect, url_for
 import sqlite3
 
 app = Flask(__name__)
+app.secret_key = "segredo_super_seguro"
 
 def get_db():
     conn = sqlite3.connect("database.db")
@@ -16,6 +18,9 @@ def index():
 
 @app.route("/funcionarios", methods=["GET","POST"])
 def funcionarios():
+
+    if "user_id" not in session:
+        return redirect("/login")
 
     conn = get_db()
 
@@ -44,6 +49,9 @@ def funcionarios():
 @app.route("/turnos", methods=["GET","POST"])
 def turnos():
 
+    if "user_id" not in session:
+        return redirect("/login")
+
     conn = get_db()
 
     if request.method == "POST":
@@ -62,6 +70,9 @@ def turnos():
 
 @app.route("/escala", methods=["GET","POST"])
 def escala():
+
+    if "user_id" not in session:
+        return redirect("/login")
 
     conn = get_db()
 
@@ -100,6 +111,9 @@ def escala():
 
 @app.route("/areas", methods=["GET","POST"])
 def areas():
+
+    if "user_id" not in session:
+        return redirect("/login")
 
     conn = get_db()
 
@@ -189,6 +203,40 @@ def escala_pdf():
     response.headers['Content-Disposition'] = f'inline; filename=escala_{area_nome}.pdf'
     return response
 
+@app.route("/login", methods=["GET","POST"])
+def login():
+
+    if request.method == "POST":
+
+        username = request.form["username"]
+        password = request.form["password"]
+
+        conn = get_db()
+
+        user = conn.execute(
+            "SELECT * FROM usuarios WHERE username=? AND password=?",
+            (username,password)
+        ).fetchone()
+
+        if user:
+            session["user_id"] = user["id"]
+            session["role"] = user["role"]
+            session["area_id"] = user["area_id"]
+
+            return redirect("/")
+
+        else:
+            return "Login inválido"
+
+    return render_template("login.html")
+
+@app.route("/logout")
+def logout():
+    session.clear()
+    return redirect("/login")
+
+    
     
 if __name__ == "__main__":
     app.run(debug=True)
+    
